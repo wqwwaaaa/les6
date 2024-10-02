@@ -1,91 +1,136 @@
-public class Main {
+class Practicum {
     public static void main(String[] args) {
-        Dog dog = new Dog();
-        Cat cat = new Cat();
-        Bird bird = new Bird();
-        Mouse mouse = new Mouse();
-        Cow cow = new Cow();
-        Frog frog =new Frog();
-        Elephant elephant = new Elephant();
-        Duck duck = new Duck();
-        Fish fish = new Fish();
-        Seal seal = new Seal();
-        System.out.println("Dog goes " + dog.say());
-        System.out.println("Cat goes " + cat.say());
-        System.out.println("Bird goes " + bird.say());
-        System.out.println("And mouse goes " + mouse.say());
-        System.out.println("Cow goes " + cow.say());
-        System.out.println("Frog goes " + frog.say());
-        System.out.println("And the elephant goes " + elephant.say());
-        System.out.println("Ducks say " + duck.say());
-        System.out.println("And fish go " + fish.say());
-        System.out.println("And the seal goes " + seal.say());
-    }
-}
-class Animal {
+        ModelQ testCar = new ModelQ();
 
-    public String say() {
-        return "I'm an Animal!";
+        System.out.println("Характеристики модели:");
+        System.out.println("Ускорение: " + testCar.acceleration + " км/(ч*с)");
+        System.out.println("Максимальная скорость: " + testCar.maxSpeed + " км/ч");
+
+        System.out.println("\nНачало теста!");
+
+        System.out.println("Едем на автопилоте:");
+        for (int second = 0; second < 5; second++) {
+            testCar.accelerateByAutopilot();
+        }
+        System.out.print("Скорость Q спустя 5с на автопилоте: " + testCar.speed + " км/ч");
+        checkResult(55.0, testCar.speed);
+
+        for (int second = 0; second < 5; second++) {
+            testCar.accelerateByAutopilot();
+        }
+        System.out.print("Скорость Q спустя ещё 5с на автопилоте: " + testCar.speed + " км/ч");
+        checkResult(60.0, testCar.speed);
+
+
+        System.out.println("Переходим в ручной режим:");
+        for (int second = 0; second < 2; second++) {
+            testCar.accelerate();
+        }
+        System.out.print("Скорость Q спустя 2с в ручном режиме: " + testCar.speed + " км/ч");
+        checkResult(260.0, testCar.speed);
+
+        for (int second = 0; second < 2; second++) {
+            testCar.accelerate();
+        }
+        System.out.print("Скорость Q спустя ещё 2с в ручном режиме: " + testCar.speed + " км/ч");
+        checkResult(300.0, testCar.speed);
+
+
+        System.out.println("Проверяем торможение:");
+        int brakingTime = 0;
+        while (testCar.speed > 0) {
+            testCar.brake();
+            brakingTime++;
+        }
+        System.out.print("Время торможения до полной остановки: " + brakingTime + "c");
+        checkResult(3, brakingTime);
+        System.out.print("Скорость Q: " + testCar.speed + " км/ч");
+        checkResult(0.0, testCar.speed);
+    }
+
+    private static void checkResult(double expect, double actual) {
+        if (expect == actual) {
+            System.out.println(" ✅");
+        } else {
+            System.out.println(" ❌");
+        }
+    }
+
+    private static void checkResult(int expect, int actual) {
+        if (expect == actual) {
+            System.out.println(" ✅");
+        } else {
+            System.out.println(" ❌");
+        }
     }
 }
 
-class Dog extends Animal{
-    @Override
-    public String say() {
-        return "woof";
+// данный класс недоступен для изменений
+class Automobile {
+    protected double speed;
+    protected double maxSpeed;
+    protected double acceleration;
+    protected double brakingSpeed;
+
+
+    public Automobile() {
+        acceleration = 100;
+        brakingSpeed = 120;
+    }
+
+    public void accelerate() {
+        if (speed < maxSpeed) {
+            speed += acceleration;
+        }
+    }
+
+    public void brake() {
+        if (speed > 0) {
+            speed -= brakingSpeed;
+        }
     }
 }
-class Cat extends Animal{
-    @Override
-    public String say() {
-        return "meow";
+
+class Texla extends Automobile {
+    protected double autoPilotMaxSpeed;
+    protected double autoPilotAcceleration;
+
+    public Texla() {
+        autoPilotMaxSpeed = 60;
+        autoPilotAcceleration = 11;
+        brakingSpeed = 100;
+    }
+
+    public void accelerateByAutopilot() {
+        //     speed += autoPilotAcceleration;
+        if (speed < autoPilotMaxSpeed) {speed += autoPilotAcceleration;}
+        else {speed = autoPilotMaxSpeed;}
+    }
+
+    public void accelerate(){
+        if (speed < maxSpeed) {
+            speed += acceleration;
+        }
+        else {
+            speed = maxSpeed;
+        }
+    }
+
+    public void brake(){
+        if (speed > 0){
+            speed -= brakingSpeed;
+        }
+        else {
+            speed = maxSpeed;
+        }
     }
 }
-class Bird extends Animal{
-    @Override
-    public String say() {
-        return "tweet";
-    }
-}
-class Mouse extends Animal{
-    @Override
-    public String say() {
-        return "squeek";
-    }
-}
-class Cow extends Animal{
-    @Override
-    public String say() {
-        return "moo";
-    }
-}
-class Frog extends Animal{
-    @Override
-    public String say() {
-        return "croak";
-    }
-}
-class Elephant extends Animal{
-    @Override
-    public String say() {
-        return "toot";
-    }
-}
-class Duck extends Animal{
-    @Override
-    public String say() {
-        return "quack";
-    }
-}
-class Fish extends Animal{
-    @Override
-    public String say() {
-        return "blub";
-    }
-}
-class Seal extends Animal{
-    @Override
-    public String say() {
-        return "ow ow ow";
+class ModelQ extends Texla {
+
+    public ModelQ() {
+
+        speed = 0;
+        maxSpeed = 300;
+        acceleration = 100;
     }
 }
